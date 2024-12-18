@@ -18,6 +18,18 @@ const Navbar = () => {
                 <li>
                     <Link to="/login" className="navbar-link">Login</Link>
                 </li>
+
+                <li>
+                    <Link to="/post" className="navbar-link">Posts</Link>
+                </li>
+
+                <li>
+                    <Link to="/postdetail" className="navbar-link">PostDetails</Link>
+                </li>
+
+                <li>
+                    <Link to="/userprofile" className="navbar-link">UserProfile</Link>
+                </li>
             </ul>
         </nav>
     )
