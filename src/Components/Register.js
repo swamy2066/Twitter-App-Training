@@ -1,16 +1,15 @@
 import { useRef, useState, useEffect } from "react";
 import { faCheck, faInfoCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from "../service/axios";
 import './Register.css';
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+const EMAIL_REGEX = /[a-z0-9\._%+!$&*=^|~#%'`?{}/\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,16})/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%]).{8,24}$/;
 
-//const REGISTER_URL = 'http://localhost:5000/users';
 
 
 const Register = () => {
@@ -18,6 +17,8 @@ const Register = () => {
     const errRef = useRef();
 
     const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [validemail, setValidEmail] = useState(false);
     const [validName, setValidName] = useState(false);
     const [userFocus, setUserFocus] = useState(false);
 
@@ -30,9 +31,8 @@ const Register = () => {
     const [matchFocus, setMatchFocus] = useState(false);
 
     const [errMsg, setErrMsg] = useState('');
-    //const [success, setSuccess] = useState(false);
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         userRef.current.focus();
@@ -47,6 +47,13 @@ const Register = () => {
     }, [name])
 
     useEffect(() => {
+        const result = EMAIL_REGEX.test(email);
+        console.log(result);
+        console.log(email);
+        setValidEmail(result);
+    }, [email])
+
+    useEffect(() => {
         const result = PWD_REGEX.test(password);
         console.log(result);
         console.log(password);
@@ -57,13 +64,13 @@ const Register = () => {
 
     useEffect(() => {
         setErrMsg('');
-    }, [name, password, matchPwd])
+    }, [name, email, password, matchPwd])
 
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        let regobj = { name, password };
+        let regobj = { name, email, password };
         //    console.log(regobj);
 
         fetch("http://localhost:5000/users", {
@@ -72,7 +79,7 @@ const Register = () => {
             body: JSON.stringify(regobj)
         }).then((res) => {
             toast.success('Registered sucessfully.')
-             navigate('/login');
+            navigate('/login');
         }).catch((err) => {
             toast.error('Failed :' + err.message);
         })
@@ -112,6 +119,36 @@ const Register = () => {
                     <FontAwesomeIcon icon={faInfoCircle} />
                     4 to 24 characters.<br />
                     Must Begin with a letter.<br />
+                    Letters, numbers, underscores, hyphens allowed.
+                </p>
+
+                <label htmlFor="email">
+                    Email:
+                    <span className={validemail ? "valid" : "hide"}>
+                        <FontAwesomeIcon icon={faCheck} />
+                    </span>
+
+                    <span className={validemail || !email ? "hide" : "invalid"}>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </span>
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    ref={userRef}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    aria-invalid={validemail ? "false" : "true"}
+                    aria-describedby="uidnote"
+                    onFocus={() => setUserFocus(true)}
+                    onBlur={() => setUserFocus(false)}
+                />
+                <p id="uidnote" className={userFocus && email && !validemail ? "instructions" : "offscreen"}>
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    4 to 24 characters.<br />
+                    Proper Email.<br />
                     Letters, numbers, underscores, hyphens allowed.
                 </p>
 

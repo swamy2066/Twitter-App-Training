@@ -6,9 +6,8 @@ import Navbar from './Components/Navbar';
 import Home from './Components/Home';
 import { ToastContainer } from 'react-toastify';
 import Post from './Components/Post';
-import PostDetail from './Components/PostDetail';
 import UserProfile from './Components/UserProfile';
-
+import Comments from './Components/Comments';
  
 
 function App() {
@@ -22,7 +21,7 @@ function App() {
           <Route path='/register' element={ <Register />} />
           <Route path='/login' element={ <Login />} />
           <Route path='/post' element={ <Post />} />
-          <Route path='/postdetail' element={ <PostDetail />} />
+          <Route path='/comments' element={ <Comments />} />
           <Route path='/userprofile' element={ <UserProfile />} />
        </Routes>
     </div>
