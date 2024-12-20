@@ -7,10 +7,9 @@ const Login = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const usenavigate = useNavigate();
+    const navigate = useNavigate();
 
 
-    const name = setUsername;
 
 
     const ProceedLogin = async (e) => {
@@ -18,20 +17,14 @@ const Login = () => {
         let regobj = { username, password };
         console.log(regobj);
 
-        fetch("http://localhost:5000/users/" + name).then((res) => {
+        fetch(`http://localhost:5000/users?name=${username}&password=${password}`).then((res) => {
             return res.json();
         }).then((resp) => {
             console.log(resp)
-            if (Object.keys(resp).length === 0) {
-                toast.error('Please Enter valid username');
+            if (resp.length === 0) {
+                toast.error('Please Enter valid credientials');
             } else {
-                if (resp.password === password) {
-                    toast.success('Success');
-                    usenavigate('/')
-
-                } else {
-                    toast.error('Please Enter valid credentials');
-                }
+                navigate('/post')
 
             }
 
@@ -42,7 +35,7 @@ const Login = () => {
     }
 
 
-     return (
+return (
 
         <section>
 
